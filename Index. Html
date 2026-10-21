@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <link rel="stylesheet" href="./style.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pen</title>
+  </head>
+  <body>
+
+    <script src="./script.js"></script>
+  </body>
+</html>
+
+<!DOCTYPE html>
+<html lang="bn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Game Zone BD</title>
+<style>
+* { box-sizing: border-box; }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #101126;
+  color: white;
+}
+header {
+  padding: 22px 16px;
+  background: #20204b;
+  text-align: center;
+}
+header h1 { color: #57f6d0; margin: 0 0 8px; }
+header p { margin: 0; color: #ddd; }
+.hero {
+  margin: 18px;
+  padding: 24px 16px;
+  border-radius: 18px;
+  text-align: center;
+  background: linear-gradient(135deg,#6039d8,#ec4899);
+}
+.hero h2 { margin-top: 0; }
+.games {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  padding: 0 14px;
+}
+.card {
+  background: #20213d;
+  border: 1px solid #393a60;
+  border-radius: 15px;
+  padding: 16px 10px;
+  text-align: center;
+}
+.emoji { font-size: 38px; }
+.card h3 { font-size: 17px; }
+button {
+  background: #57f6d0;
+  color: #101126;
+  border: none;
+  border-radius: 9px;
+  padding: 11px 12px;
+  font-weight: bold;
+  cursor: pointer;
+}
+#game {
+  margin: 18px;
+  padding: 20px;
+  background: #20213d;
+  border-radius: 15px;
+  text-align: center;
+}
+#game button { margin: 5px; }
+#message { color: #57f6d0; }
+footer {
+  text-align: center;
+  padding: 22px;
+  color: #aaa;
+}
+@media(max-width:340px) {
+  .games { grid-template-columns: 1fr; }
+}
+</style>
+</head>
+<body>
+
+<header>
+  <h1>🎮 GAME ZONE BD</h1>
+  <p>খেলো, শেখো, আনন্দ করো!</p>
+</header>
+
+<section class="hero">
+  <h2>গেমিং দুনিয়ায় স্বাগতম!</h2>
+  <p>তোমার পছন্দের গেম বেছে নাও।</p>
+  <button onclick="showGame('click')">এখনই খেলো 🎯</button>
+</section>
+
+<h2 style="text-align:center">🔥 আমাদের গেম</h2>
+
+<section class="games">
+  <div class="card">
+    <div class="emoji">🎯</div>
+    <h3>ক্লিক চ্যালেঞ্জ</h3>
+    <p>দ্রুত ক্লিক করো!</p>
+    <button onclick="showGame('click')">খেলো</button>
+  </div>
+  <div class="card">
+    <div class="emoji">🧠</div>
+    <h3>কুইজ গেম</h3>
+    <p>জ্ঞান যাচাই করো!</p>
+    <button onclick="showGame('quiz')">খেলো</button>
+  </div>
+</section>
+
+<section id="game">
+  <h2 id="gameTitle">🎮 গেম বেছে নাও</h2>
+  <p id="gameText">উপরের যেকোনো গেমের বোতাম চাপো।</p>
+  <div id="controls"></div>
+  <p id="message"></p>
+</section>
+
+<footer>
+  © 2026 Game Zone BD | Free Games
+</footer>
+
+<script>
+let score = 0;
+let time = 10;
+let timer = null;
+let playing = false;
+
+function showGame(type) {
+  clearInterval(timer);
+  playing = false;
+  document.getElementById("message").textContent = "";
+  const controls = document.getElementById("controls");
+
+  if (type === "click") {
+    score = 0;
+    time = 10;
+    document.getElementById("gameTitle").textContent =
+      "🎯 ক্লিক চ্যালেঞ্জ";
+    document.getElementById("gameText").textContent =
+      "১০ সেকেন্ডে যতবার পারো ক্লিক করো!";
+    controls.innerHTML =
+      '<h3>স্কোর: <span id="score">0</span></h3>' +
+      '<p id="clock">সময়: ১০ সেকেন্ড</p>' +
+      '<button id="start" onclick="startClick()">শুরু করো</button>' +
+      '<button id="hit" onclick="hitClick()" disabled>ক্লিক!</button>';
+  } else {
+    document.getElementById("gameTitle").textContent =
+      "🧠 কুইজ গেম";
+    document.getElementById("gameText").textContent =
+      "বাংলাদেশের রাজধানী কোনটি?";
+    controls.innerHTML =
+      '<button onclick="answerQuiz(false)">চট্টগ্রাম</button>' +
+      '<button onclick="answerQuiz(true)">ঢাকা</button>' +
+      '<button onclick="answerQuiz(false)">রাজশাহী</button>';
+  }
+}
+
+function startClick() {
+  if (playing) return;
+  score = 0;
+  time = 10;
+  playing = true;
+  document.getElementById("score").textContent = score;
+  document.getElementById("hit").disabled = false;
+  document.getElementById("start").disabled = true;
+  document.getElementById("message").textContent = "";
+
+  timer = setInterval(function() {
+    time--;
+    document.getElementById("clock").textContent =
+      "সময়: " + time + " সেকেন্ড";
+    if (time <= 0) {
+      clearInterval(timer);
+      playing = false;
+      document.getElementById("hit").disabled = true;
+      document.getElementById("start").disabled = false;
+      document.getElementById("message").textContent =
+        "খেলা শেষ! তোমার স্কোর: " + score;
+    }
+  }, 1000);
+}
+
+function hitClick() {
+  if (!playing) return;
+  score++;
+  document.getElementById("score").textContent = score;
+}
+
+function answerQuiz(correct) {
+  document.getElementById("message").textContent =
+    correct ? "সঠিক উত্তর! 🎉" : "আবার চেষ্টা করো!";
+}
+</script>
+</body>
+</html>html {
+  height: 100%;
+  background: 50% 50% no-repeat
+    url('data:image/svg+xml,<svg viewBox="-20 -5 60 40" width="140" xmlns="http://www.w3.org/2000/svg" opacity="0.2"><path d="M1 8l11-7 11 7v8l-11 7-11-7zm0 0l11 8 11-8m0 8L12 8 1 16M12 1v7m0 8v7" fill="none" stroke="currentColor" stroke-linejoin="round" stroke-width="2"/><text x="-12" y="32" font-size="5" font-family="monospace" fill="currentColor">Built on CodePen</text></svg>');
+}
+
